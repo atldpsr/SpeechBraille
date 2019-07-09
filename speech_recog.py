@@ -29,13 +29,24 @@ alphabets = {
     " ": []
     
     }
-
+servos = {
+    1:7,
+    2:8,
+    3:9,
+    4:10,
+    5:11,
+    6:12
+    }
 
 test="hello anish"
 test_pins=[]
 for i in test:
     test_pins.append(alphabets[i])
-    
+for j in test_pins:
+    for k in j:
+        setAngle()
 print (test_pins)
+
+
 
     
