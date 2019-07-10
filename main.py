@@ -1,4 +1,6 @@
 # from Servo_control import setAngle
+from ibm_recognize import recognize
+from voice_recorder import record
 import requests
 from time import sleep
 angle = 90              #angle to which to change the servo to
@@ -6,7 +8,6 @@ space_interval = 1      #amount of time to wait when getting a space
 letter_interval = 0.5   #amount of time to wait when getting a new letter
 
 
-test="hello anish"
 
 
 alphabets = {           # alphabets mapped to servo numbers
@@ -48,20 +49,30 @@ servos = { # pin mappings
     } 
 # for servo in servos:
 #     setAngle(servo, 0) # Initialise all the servos from zero
+prompt = input("Do you wanna recognize from an exisiting file?[y/n]").lower()
+if prompt == "y":
+    filename = input("Enter file name (without any extension)") + '.wav'
+else:
+    filename = input("Enter the filename you want to save to without any extension") + '.wav'
+    record(filename)
+
+test = recognize(filename).replace("'", "")
+
+print('recognized: {}'.format(test))
 test_pins=[alphabets[i.lower()] for i in test] # a list of all the sservo mappings for the sentence
 
 
 
 for letter, character  in zip(test_pins, test): # iterate over all letters in the string
     if letter == []:                            #space
-        print(f'waiting {space_interval} second, got a space')
+        print('waiting {} second, got a space'.format(space_interval))
         sleep(space_interval)
     else:
-        print(f'got letter: {character}')
+        print('got letter: {}'.format(character))
         
         for pin in letter:                      # iterate over all the pins for the letter
 
-            print(f"setting pin:{pin}, angle:{angle}")
+            print("setting pin:{}, angle:{}".format(pin, angle))
     print('letter completed, now waiting for 0.5 seconds')
     sleep(letter_interval)                      # wait for new letter
 

@@ -9,18 +9,19 @@ speech_to_text = SpeechToTextV1(
 )
 
 def recognize(filename):
+    global data
     with open(join(dirname(__file__), './.', filename), 'rb') as audio_file:
         speech_recognition_results = speech_to_text.recognize(
             audio=audio_file,
             content_type='audio/wav',
             word_alternatives_threshold=0.9,
         ).get_result()
-    print(json.dumps(speech_recognition_results, indent=2))
+    # print(json.dumps(speech_recognition_results, indent=2))
     try:    
         sentence = speech_recognition_results['results'][0]['alternatives'][0]['transcript']
     except KeyError:
         sentence = ''        
+        data = speech_recognition_results
         print(json.dumps(speech_recognition_results, indent=2))
     return sentence
-        
 
